@@ -39,7 +39,6 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     
 
     if (x1 < x0){
-        printf("x0: %i, x1: %i, y0: %i, y1: %i\n", x0, x1, y0, y1);
         int temp_x = x1;
         int temp_y = y1;
         x1 = x0;
@@ -48,22 +47,23 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
         y0 = temp_y;
     }
 
-    // bool steep = false;
-    // int dx = (x1 - x0);
-    // if (dx){
-    //     if (abs((y1 - y0) / dx) > 1){
-    //         steep = true;
-    //     }
-    // }
-
-    // if (steep){
-    //     int temp_1 = x0;
-    //     x0 = y0;
-    //     y0 = temp_1;
-    //     int temp_2 = x1;
-    //     x1 = y1;
-    //     y1 = temp_2;
-    // }
+    bool steep = false;
+    int dx = (x1 - x0);
+    if (colour == 16711680){
+            printf("%i, %i\n", dx, (y1-y0));
+    }
+    
+    if (abs(y1 - y0) > abs(x1 - x0)){
+        steep = true;
+    }
+    if (steep){
+        int temp_1 = x0;
+        x0 = y0;
+        y0 = temp_1;
+        int temp_2 = x1;
+        x1 = y1;
+        y1 = temp_2;
+    }
 
     int x,y;
     y = y0;
@@ -73,7 +73,12 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     double d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
 
     for (x = x0; x <= x1; x++){
-        PutPixel(s, x, y, colour);
+        if(steep){
+            PutPixel(s,y,x,colour);
+        }
+        else{
+            PutPixel(s, x, y, colour);
+        }
         if (d < 0){
             y++;
             d += (x1 - x0) + (y0 - y1);
