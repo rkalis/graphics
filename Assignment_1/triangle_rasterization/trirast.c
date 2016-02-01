@@ -1,16 +1,17 @@
-/* Computer Graphics assignment, Triangle Rasterization
+/* 
+ * Computer Graphics assignment, Triangle Rasterization
  * Filename ........ trirast.c
- * Description ..... Implements triangle rasterization
- * Created by ...... Paul Melis
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * STUDENT 1:
+ * Student name .... Robert Jan Schlimbach
+ * Student email ... robertjan.schlimbach@student.uva.nl
+ * Student ID ...... 10802126
  *
+ * STUDENT 2:
+ * Student name .... Rosco Kalis
+ * Student email ... rosco.kalis@student.uva.nl
+ * Student ID ...... 10771603
  *
- * (always fill in these fields before submitting!!)
  */
 
 #include <stdlib.h>
@@ -26,14 +27,10 @@
  * The triangle is drawn in color (r,g,b).
  */
 
-void
-draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
-    byte r, byte g, byte b)
-{
+void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
+    			   byte r, byte g, byte b) {
 }
 
-void
-draw_triangle_optimized(float x0, float y0, float x1, float y1, float x2, float y2,
-    byte r, byte g, byte b)
-{
+void draw_triangle_optimized(float x0, float y0, float x1, float y1, float x2, float y2,
+							 byte r, byte g, byte b) {
 }
