@@ -14,6 +14,7 @@
 CC=gcc
 CFLAGS=$(shell sdl-config --cflags) -W -Wall -std=c99 -pedantic-errors
 LDFLAGS=$(shell sdl-config --libs) -lm -lGL
+#LDFLAGS=$(shell sdl-config --libs) -lm -framework OpenGL
 #SOURCES=$(shell ls *.c *.c??)
 
 all: main
