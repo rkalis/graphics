@@ -37,28 +37,44 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     int ix,iy;
     int x,y;
 
-    PutPixel(s,x0,y0,colour);
-    PutPixel(s,x1,y1,colour);
+
+
+    if (x1 < x0){
+        int temp_x = x1;
+        int temp_y = y1;
+        x1 = x0;
+        y1 = y0;
+        x0 = temp_x;
+        y0 = temp_y;
+    }   
+    printf("x0: %i, x1: %i, y0: %i, y1: %i\n", x0, x1, y0, y1);
+    double d = (y0 - y1) * (x0 + 1) + (x1 - x0) * (y0 + 0.5) + (x0 * y1) - (x1 * y0);
+    printf("d:  %d\n", d);
+
+    // PutPixel(s,x0,y0,colour);
+    // PutPixel(s,x1,y1,colour);
+
+    // printf("Hello\n");
 
 
 
-    if(x1 > x0)
-        ix = 1; 
-    else 
-        ix = -1;
+    // if(x1 > x0)
+    //     ix = 1; 
+    // else 
+    //     ix = -1;
 
-    for(x=x0; x!=x1; x += ix){
-        PutPixel(s,x,y0,colour);
-    }
+    // for(x=x0; x!=x1; x += ix){
+    //     PutPixel(s,x,y0,colour);
+    // }
 
-    if(y1 > y0) 
-        iy = 1; 
-    else 
-        iy = -1;
+    // if(y1 > y0) 
+    //     iy = 1; 
+    // else 
+    //     iy = -1;
 
-    for(y=y0 ;y!=y1; y+=iy){
-        PutPixel(s,x1,y,colour);
-    }
+    // for(y=y0 ;y!=y1; y+=iy){
+    //     PutPixel(s,x1,y,colour);
+    // }
 
     return;
 }
