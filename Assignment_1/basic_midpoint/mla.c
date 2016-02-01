@@ -68,6 +68,9 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     int x,y;
     y = y0;
 
+    PutPixel(s, x, y, colour);
+    PutPixel(s, x1, y1, colour);
+
 
 
     double d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
@@ -93,8 +96,7 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     // printf("x0: %i, x1: %i, y0: %i, y1: %i\n\n", x0, x1, y0, y1);
 
     
-    PutPixel(s, x, y, colour);
-    PutPixel(s, x1, y1, colour);
+    
     
     // PutPixel(s,x1,y1,colour);
 
