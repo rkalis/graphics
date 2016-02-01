@@ -16,6 +16,7 @@
 
 #include "SDL.h"   
 #include "init.h"
+#include "stdbool.h"
 
 /*
 * Midpoint Line Algorithm
@@ -34,24 +35,63 @@
 *
 */
 void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
-    int ix,iy;
+    
+    
+
+    // if (x1 < x0){
+    //     printf("x0: %i, x1: %i, y0: %i, y1: %i\n", x0, x1, y0, y1);
+    //     int temp_x = x1;
+    //     int temp_y = y1;
+    //     x1 = x0;
+    //     y1 = y0;
+    //     x0 = temp_x;
+    //     y0 = temp_y;
+    // }
+
+    // bool steep = false;
+    // int dx = (x1 - x0);
+    // if (dx){
+    //     if (abs((y1 - y0) / dx) > 1){
+    //         steep = true;
+    //     }
+    // }
+
+    // if (steep){
+    //     int temp_1 = x0;
+    //     x0 = y0;
+    //     y0 = temp_1;
+    //     int temp_2 = x1;
+    //     x1 = y1;
+    //     y1 = temp_2;
+    // }
+
     int x,y;
+    y = y0;
 
 
+    double d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
 
-    if (x1 < x0){
-        int temp_x = x1;
-        int temp_y = y1;
-        x1 = x0;
-        y1 = y0;
-        x0 = temp_x;
-        y0 = temp_y;
-    }   
-    printf("x0: %i, x1: %i, y0: %i, y1: %i\n", x0, x1, y0, y1);
-    double d = (y0 - y1) * (x0 + 1) + (x1 - x0) * (y0 + 0.5) + (x0 * y1) - (x1 * y0);
-    printf("d:  %d\n", d);
+    for (x = x0; x <= x1; x++){
+        PutPixel(s, x, y, colour);
+        if (d < 0){
+            y++;
+            d += (x1 - x0) + (y0 - y1);
+        }
+        else{
+            d += (y0 - y1);
+        }
+    }
 
-    // PutPixel(s,x0,y0,colour);
+    
+    
+    printf("x0: %i, x1: %i, y0: %i, y1: %i\n\n", x0, x1, y0, y1);
+
+    
+    PutPixel(s, x, y, colour);
+    PutPixel(s, x1, y1, colour);
+
+    printf("%d\n", d); 
+    
     // PutPixel(s,x1,y1,colour);
 
     // printf("Hello\n");
