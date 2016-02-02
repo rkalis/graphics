@@ -50,15 +50,31 @@ void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
 
     float alpha, beta, gamma;
 
-
     for(int y = ymin; y <= ymax; y++) {
         for(int x = xmin; x <= xmax; x++) {
             alpha = f(x1, x2, y1, y2, x, y);
             beta = f(x2, x0, y2, y0, x, y);
             gamma = f(x0, x1, y0, y1, x, y);
-            if(alpha > 0 && beta > 0 && gamma > 0) {
-                PutPixel(x, y, r, g, b);
-                // PutPixel(x, y, alpha * 255, beta * 255, gamma * 255);
+
+            int zero_count = 0;
+            int neg_count  = 0;
+            if(alpha == 0) zero_count++;
+            if(beta  == 0) zero_count++;
+            if(gamma == 0) zero_count++;
+            if(alpha < 0) neg_count++;
+            if(beta  < 0) neg_count++;
+            if(gamma < 0) neg_count++;
+
+            if(neg_count == 0) {
+                if(zero_count == 0) {
+                    PutPixel(x, y, r, g, b);
+                }
+                else if(zero_count == 1) {
+                    PutPixel(x, y, r, g, b);
+                }
+                else if(zero_count == 2) {
+                    PutPixel(x, y, r, g, b);
+                }
             }
         }
     }
