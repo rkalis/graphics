@@ -3,9 +3,9 @@
  * Created by ...... Paul Melis
  */
 
-#include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <sys/time.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -62,12 +62,21 @@ void PutPixel(int x, int y, byte r, byte g, byte b)
         return;
     }
 
-    // The pixels in framebuffer[] are layed out sequentially,
-    // with the R, G and B values one after the other, e.g
-    // RGBRGBRGB...
-    framebuffer[3*(framebuffer_width*y+x)] = r;
-    framebuffer[3*(framebuffer_width*y+x)+1] = g;
-    framebuffer[3*(framebuffer_width*y+x)+2] = b;
+    if(color_by_putpixel_count) {
+        if(framebuffer[3 * (framebuffer_width * y + x)] == 0) {
+            framebuffer[3 * (framebuffer_width * y + x)] = 128;
+        }
+        else if(framebuffer[3 * (framebuffer_width * y + x)] == 128) {
+            framebuffer[3 * (framebuffer_width * y + x)] = 255;
+        }
+    } else {
+        // The pixels in framebuffer[] are layed out sequentially,
+        // with the R, G and B values one after the other, e.g
+        // RGBRGBRGB...
+        framebuffer[3 * (framebuffer_width * y + x)] = r;
+        framebuffer[3 * (framebuffer_width * y + x) + 1] = g;
+        framebuffer[3 * (framebuffer_width * y + x) + 2] = b;
+    }
 }
 
 void
