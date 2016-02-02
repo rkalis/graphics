@@ -27,7 +27,8 @@
  * The triangle is drawn in color (r,g,b).
  */
 
- int OFFSCREEN_POINT[] = {-1, -1};
+/* Defines the offscreen point for drawing edges */ 
+int OFFSCREEN[] = {-1, -1};
 
 float max_3(float a, float b, float c) {
     float max_a_b = fmax(a, b);
@@ -52,30 +53,29 @@ void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
 
     float alpha, beta, gamma;
 
+    /* Equations for the points in respect to the lines of the triangle */
+    float f_alpha = f(x1, x2, y1, y2, x0, y0);
+    float f_beta = f(x2, x0, y2, y0, x1, y1);
+    float f_gamma = f(x0, x1, y0, y1, x2, y2);
+
+    /* Equations for the offscreen points in respect to the 
+     * lines of the triangle */
+    float f_alpha_offscreen = f(x1, x2, y1, y2, OFFSCREEN[0], OFFSCREEN[1]);
+    float f_beta_offscreen  = f(x2, x0, y2, y0, OFFSCREEN[0], OFFSCREEN[1]);
+    float f_gamma_offscreen = f(x0, x1, y0, y1, OFFSCREEN[0], OFFSCREEN[1]);
+
     for(int y = ymin; y <= ymax; y++) {
         for(int x = xmin; x <= xmax; x++) {
-            alpha = f(x1, x2, y1, y2, x, y) / f(x1, x2, y1, y2, x0, y0);
-            beta = f(x2, x0, y2, y0, x, y) / f(x2, x0, y2, y0, x1, y1);
-            gamma = f(x0, x1, y0, y1, x, y) / f(x0, x1, y0, y1, x2, y2);
+            alpha = f(x1, x2, y1, y2, x, y) / f_alpha;
+            beta = f(x2, x0, y2, y0, x, y) / f_beta;
+            gamma = f(x0, x1, y0, y1, x, y) / f_gamma;
 
-            int zero_count = 0;
-            int neg_count  = 0;
-            if(alpha == 0) zero_count++;
-            if(beta  == 0) zero_count++;
-            if(gamma == 0) zero_count++;
-            if(alpha < 0) neg_count++;
-            if(beta  < 0) neg_count++;
-            if(gamma < 0) neg_count++;
-
-            if(neg_count == 0) {
-                if(zero_count == 0) {
+            if(alpha >= 0 && beta >= 0 && gamma >= 0) {
+                if((alpha > 0 || f_alpha * f_alpha_offscreen > 0)
+                && (beta > 0 || f_beta * f_beta_offscreen > 0)
+                && (gamma > 0 || f_gamma * f_gamma_offscreen > 0)) {
                     PutPixel(x, y, r, g, b);
-                }
-                else if(zero_count == 1) {
-                    PutPixel(x, y, r, g, b);
-                }
-                else if(zero_count == 2) {
-                    PutPixel(x, y, r, g, b);
+                    // PutPixel(x, y, 255 * alpha, 255 * beta, 255 * gamma);
                 }
             }
         }
