@@ -27,6 +27,8 @@
  * The triangle is drawn in color (r,g,b).
  */
 
+ int OFFSCREEN_POINT[] = {-1, -1};
+
 float max_3(float a, float b, float c) {
     float max_a_b = fmax(a, b);
     return fmax(max_a_b, c);
@@ -52,9 +54,9 @@ void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
 
     for(int y = ymin; y <= ymax; y++) {
         for(int x = xmin; x <= xmax; x++) {
-            alpha = f(x1, x2, y1, y2, x, y);
-            beta = f(x2, x0, y2, y0, x, y);
-            gamma = f(x0, x1, y0, y1, x, y);
+            alpha = f(x1, x2, y1, y2, x, y) / f(x1, x2, y1, y2, x0, y0);
+            beta = f(x2, x0, y2, y0, x, y) / f(x2, x0, y2, y0, x1, y1);
+            gamma = f(x0, x1, y0, y1, x, y) / f(x0, x1, y0, y1, x2, y2);
 
             int zero_count = 0;
             int neg_count  = 0;
