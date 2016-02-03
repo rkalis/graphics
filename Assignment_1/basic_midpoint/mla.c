@@ -38,6 +38,9 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
     
     
 
+    PutPixel(s, x1, y1, colour);
+
+    // If the direction of line in the x direction is negative, reverse the points.
     if (x1 < x0){
         int temp_x = x1;
         int temp_y = y1;
@@ -47,12 +50,18 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
         y0 = temp_y;
     }
 
-    bool steep = false;
-    int dx = (x1 - x0);
-    if (colour == 16711680){
-            printf("%i, %i\n", dx, (y1-y0));
+    // If the direction of the line in the y direction is negative, switch y0 and y1.
+    bool negative = false;
+    if((y1-y0)<0){
+        negative = true;
+        int temp = y1;
+        y1 = y0;
+        y0 = temp;
     }
-    
+
+    // If the slope of the line in either the positive or negative direction is larger than 45 degrees, 
+    // switch the x and y coordinates.
+    bool steep = false;
     if (abs(y1 - y0) > abs(x1 - x0)){
         steep = true;
     }
@@ -67,60 +76,34 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
 
     int x,y;
     y = y0;
+    
+    // Calculate the middle line point.
+    int d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
 
-    PutPixel(s, x, y, colour);
-    PutPixel(s, x1, y1, colour);
-
-
-
-    double d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
 
     for (x = x0; x <= x1; x++){
-        if(steep){
-            PutPixel(s,y,x,colour);
+        int temp_y;
+        if(negative){
+            temp_y = (y0 - (y - y1));
         }
         else{
-            PutPixel(s, x, y, colour);
+            temp_y = y;
+        }
+
+        if(steep){
+            PutPixel(s, temp_y, x,colour);
+        }
+        else{
+            PutPixel(s, x, temp_y, colour);
         }
         if (d < 0){
             y++;
-            d += (x1 - x0) + (y0 - y1);
+            d += (x1 - x0) + (y0 - y1);    
         }
         else{
             d += (y0 - y1);
         }
     }
-
-    
-    
-    // printf("x0: %i, x1: %i, y0: %i, y1: %i\n\n", x0, x1, y0, y1);
-
-    
-    
-    
-    // PutPixel(s,x1,y1,colour);
-
-    // printf("Hello\n");
-
-
-
-    // if(x1 > x0)
-    //     ix = 1; 
-    // else 
-    //     ix = -1;
-
-    // for(x=x0; x!=x1; x += ix){
-    //     PutPixel(s,x,y0,colour);
-    // }
-
-    // if(y1 > y0) 
-    //     iy = 1; 
-    // else 
-    //     iy = -1;
-
-    // for(y=y0 ;y!=y1; y+=iy){
-    //     PutPixel(s,x1,y,colour);
-    // }
 
     return;
 }
