@@ -56,6 +56,8 @@ int f_incr(float xa, float xb, float ya, float yb, float sign) {
 
 void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
     byte r, byte g, byte b) {
+
+    /* Finds the bounding box of the triangle */
     int xmin = (int) floor(min_3(x0, x1, x2));
     int xmax = (int) ceil(max_3(x0, x1, x2));
     int ymin = (int) floor(min_3(y0, y1, y2));
@@ -85,7 +87,6 @@ void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
                 && (beta > 0 || beta_function * beta_function_offscreen > 0)
                 && (gamma > 0 || gamma_function * gamma_function_offscreen > 0)) {
                     PutPixel(x, y, r, g, b);
-                    // PutPixel(x, y, 255 * alpha, 255 * beta, 255 * gamma);
                 }
             }
         }
@@ -95,6 +96,7 @@ void draw_triangle(float x0, float y0, float x1, float y1, float x2, float y2,
 void draw_triangle_optimized(float x0, float y0, float x1, float y1, float x2, float y2,
     byte r, byte g, byte b) {
 
+    /* Finds the bounding box of the triangle */
     int xmin = (int) floor(min_3(x0, x1, x2));
     int xmax = (int) ceil(max_3(x0, x1, x2));
     int ymin = (int) floor(min_3(y0, y1, y2));
@@ -123,10 +125,17 @@ void draw_triangle_optimized(float x0, float y0, float x1, float y1, float x2, f
     if(signbit(f(x0, x1, y0, y1, OFFSCREEN[0], OFFSCREEN[1])))
         gamma_sign_offscreen = -1;
 
+    int alpha = f(x1, x2, y1, y2, xmin - 1, ymin - 1) * alpha_sign;
+    int beta  = f(x2, x0, y2, y0, xmin - 1, ymin - 1) * beta_sign;
+    int gamma = f(x0, x1, y0, y1, xmin - 1, ymin - 1) * gamma_sign;
+
     for(int y = ymin; y <= ymax; y++) {
-        int alpha = f(x1, x2, y1, y2, xmin - 1, y) * alpha_sign;
-        int beta  = f(x2, x0, y2, y0, xmin - 1, y) * beta_sign;
-        int gamma = f(x0, x1, y0, y1, xmin - 1, y) * gamma_sign;
+        alpha += f_incr(x1, x2, 0, 0, alpha_sign);
+        beta += f_incr(x2, x0, 0, 0, beta_sign);
+        gamma += f_incr(x0, x1, 0, 0, gamma_sign);
+        int prev_alpha = alpha;
+        int prev_beta = beta;
+        int prev_gamma = gamma;
         for(int x = xmin; x <= xmax; x++) {
             alpha += f_incr(0, 0, y1, y2, alpha_sign);
             beta += f_incr(0, 0, y2, y0, beta_sign);
@@ -142,5 +151,8 @@ void draw_triangle_optimized(float x0, float y0, float x1, float y1, float x2, f
                 }
             }
         }
+        alpha = prev_alpha;
+        beta = prev_beta;
+        gamma = prev_gamma;
     }
 }
