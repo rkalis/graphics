@@ -47,6 +47,17 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
         y0 = temp_y;
     }
 
+    PutPixel(s, x0, y0, colour);
+    PutPixel(s, x1, y1, colour);
+
+    bool negative = false;
+    if((y1-y0)<0){
+        negative = true;
+        int temp = y1;
+        y1 = y0;
+        y0 = temp;
+    }
+
     bool steep = false;
     int dx = (x1 - x0);
     if (colour == 16711680){
@@ -67,24 +78,27 @@ void mla(SDL_Surface *s, int x0, int y0, int x1, int y1, Uint32 colour) {
 
     int x,y;
     y = y0;
-
-    PutPixel(s, x, y, colour);
-    PutPixel(s, x1, y1, colour);
-
-
-
+    
     double d = (y0 - y1)*(x0 + 1) + (x1 - x0)*(y0 + 0.5) + (x0 * y1) - (x1 * y0);
 
     for (x = x0; x <= x1; x++){
-        if(steep){
-            PutPixel(s,y,x,colour);
+        int temp_y;
+        if(negative){
+            temp_y = (y0 - (y - y1));
         }
         else{
-            PutPixel(s, x, y, colour);
+            temp_y = y;
+        }
+
+        if(steep){
+            PutPixel(s, temp_y, x,colour);
+        }
+        else{
+            PutPixel(s, x, temp_y, colour);
         }
         if (d < 0){
             y++;
-            d += (x1 - x0) + (y0 - y1);
+            d += (x1 - x0) + (y0 - y1);    
         }
         else{
             d += (y0 - y1);
