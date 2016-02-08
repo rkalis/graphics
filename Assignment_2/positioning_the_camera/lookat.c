@@ -13,9 +13,15 @@
  *
  * (always fill in these fields before submitting!!)
  */
-#include <GL/glut.h>   
+
+#ifdef OS_X
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
 
  
 /* ANSI C/ISO C89 does not specify this constant (?) */
