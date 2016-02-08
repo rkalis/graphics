@@ -14,11 +14,17 @@
  * (always fill in these fields before submitting!!)
  */
 
+#ifdef OS_X
+#    include <OpenGL/gl.h>
+#    include <GLUT/glut.h>
+#else
+#   include <GL/glut.h>
+#   include <GL/gl.h>
+#   include <GL/glu.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "transformations.h"
 #include <math.h>
 

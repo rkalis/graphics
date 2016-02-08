@@ -1,9 +1,22 @@
 CC=gcc
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+	WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
+	CFLAGS=-g -O2 -std=c99 $(WARNING_FLAGS) -D OS_X
+	LDFLAGS=-g -framework opengl -framework glut
+else
+	WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
+	CFLAGS=-g -O2 -std=c99 $(WARNING_FLAGS)
+	LDFLAGS=-g -lGL -lglut -lGLU -lm
+endif
+# #LDFLAGS=-lglut -lglu -lgl
 
-WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
-CFLAGS=-O2 -std=c99 $(WARNING_FLAGS)
-LDFLAGS=-lGL -lglut -lGLU -lm
-#LDFLAGS=-lglut -lglu -lgl
+# CC=gcc
+
+# WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
+# CFLAGS=-O2 -std=c99 $(WARNING_FLAGS)
+# LDFLAGS=-framework opengl -framework glut -lm
+# #LDFLAGS=-lglut -lglu -lgl
 
 .c.o:
 	$(CC) -c $(CFLAGS) $<
