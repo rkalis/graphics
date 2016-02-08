@@ -4,14 +4,22 @@
  * Description ..... Draw teapots that can be interactively rotated with the mouse
  * Created by ...... Paul Melis
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * STUDENT 1:
+ * Student name .... Robert Jan Schlimbach
+ * Student email ... robertjan.schlimbach@student.uva.nl
+ * Student ID ...... 10802126
  *
+ * STUDENT 2:
+ * Student name .... Rosco Kalis
+ * Student email ... rosco.kalis@student.uva.nl
+ * Student ID ...... 10771603
  *
- * (always fill in these fields before submitting!!)
+ * Assinment answers:
+ * Q1 - The rotation order is x, y, z
+ * Q2 - The x and z rotational axes point in the same direction,
+ *      since x is rotated before z, z has become obsolete.
+ *      In other words, a Gimbal lock has occurred.
+ *
  */
 
 #ifdef OS_X
@@ -106,9 +114,17 @@ void drawTeapots(void)
     /* This function is called from DrawGLScene() below */
 
     glPushMatrix();
-
     drawRotatedTeapot(x_rotation, 0.0, z_rotation);
+    glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(5, 0, 0);
+    drawRotatedTeapot(x_rotation, 45, z_rotation);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(10, 0, 0);
+    drawRotatedTeapot(x_rotation, 90, z_rotation);
     glPopMatrix();
 }
 
