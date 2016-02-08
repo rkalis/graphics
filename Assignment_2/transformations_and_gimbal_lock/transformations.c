@@ -51,6 +51,7 @@ int find_minimum(float a[], int n) {
   return index;
 }
 
+/* Transformation matrix for scaling over x, y and z */
 void myScalef(GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat M[16] =
@@ -64,7 +65,7 @@ void myScalef(GLfloat x, GLfloat y, GLfloat z)
     glMultMatrixf(M);
 }
 
-
+/* Transformation matrix for translating over x, y and z */
 void myTranslatef(GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat M[16] =
@@ -78,87 +79,52 @@ void myTranslatef(GLfloat x, GLfloat y, GLfloat z)
     glMultMatrixf(M);
 }
 
-float dot_product3D(GLfloat vector1[], GLfloat vector2[]) {
-    return vector1[0] * vector2[0] + vector1[1] * vector2[1] + vector1[2] * vector2[2];
-}
-
 void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
     GLfloat u[3], v[3], w[3], t[3];
 
-    //
-    // 1. Create the orthonormal basis
-    //
+    /* * * * * * * * * * * * * * * * *
+     * Creating an orthogonal basis: *
+     * * * * * * * * * * * * * * * * */
+
+    /* Setting and normalising w */
     GLfloat mag_w = sqrt(x * x + y * y + z * z);
+
     w[0] = x / mag_w;
     w[1] = y / mag_w;
-    w[2] = z / mag_w; 
-    assert(sqrt(w[0] * w[0] + w[1] * w[1] + w[2] * w[2]) == 1);
+    w[2] = z / mag_w;
+
+    /* Setting t */
     int mindex = find_minimum(w, 3);
     t[0] = w[0];
     t[1] = w[1];
     t[2] = w[2];
     t[mindex] = 1;
 
+    /* Computing and normalising u */
     u[0] = t[1] * w[2] - t[2] * w[1];
     u[1] = t[2] * w[0] - t[0] * w[2];
     u[2] = t[0] * w[1] - t[1] * w[0];
 
     GLfloat mag_u = sqrt(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]);
+
     u[0] = u[0] / mag_u;
     u[1] = u[1] / mag_u;
     u[2] = u[2] / mag_u;
-    assert(sqrt(u[0] * u[0] + u[1] * u[1] + u[2] * u[2]) == 1);
 
+    /* Computing v */
     v[0] = w[1] * u[2] - w[2] * u[1];
     v[1] = w[2] * u[0] - w[0] * u[2];
     v[2] = w[0] * u[1] - w[1] * u[0];
 
-    printf("u: %f, %f, %f\n", u[0], u[1], u[2]);
-    printf("v: %f, %f, %f\n", v[0], v[1], v[2]);
-    printf("w: %f, %f, %f\n", w[0], w[1], w[2]);
+    /* * * * * * * * * * * * * * * * *
+     * Setting the correct matrices: *
+     * * * * * * * * * * * * * * * * */
 
-    // Store the incoming rotation axis in w and normalize w
-
-    // Compute the value of t, based on w
-
-    // Compute u = t x w
-
-    // Normalize u
-
-    // Compute v = w x u
-
-    // At this point u, v and w should form an orthonormal basis.
-    // If your routine does not seem to work correctly it might be
-    // a good idea to the check the vector values.
-
-    //
-    // 2. Set up the three matrices making up the rotation
-    //
-
-    // Specify matrix A
-
-    GLfloat C[16] =
-    {
-        u[0], v[0], w[0], 0.0,
-        u[1], v[1], w[1], 0.0,
-        u[2], v[2], w[2], 0.0,
-         0.0,  0.0,  0.0, 1.0
-    };
-
-    // Convert 'angle' to radians
+    /* Converting the angle to radians and computing the sine and cosine */
     angle = -1 * angle * M_PI / 180;
-    // Specify matrix B
-
-    GLfloat B[16] =
-    {
-        cos(angle), -1 * sin(angle), 0.0, 0.0,
-        sin(angle),      cos(angle), 0.0, 0.0,
-               0.0,             0.0, 1.0, 0.0,
-               0.0,             0.0, 0.0, 1.0
-    };
-
-    // Specify matrix C
+    float cosa = cos(angle);
+    float sina = sin(angle);
 
     GLfloat A[16] =
     {
@@ -168,9 +134,21 @@ void myRotatef(GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
          0.0,  0.0,  0.0, 1.0
     };
 
-    //
-    // 3. Apply the matrices to get the combined rotation
-    //
+    GLfloat B[16] =
+    {
+        cosa, -1 * sina, 0.0, 0.0,
+        sina,      cosa, 0.0, 0.0,
+         0.0,       0.0, 1.0, 0.0,
+         0.0,       0.0, 0.0, 1.0
+    };
+
+    GLfloat C[16] =
+    {
+        u[0], v[0], w[0], 0.0,
+        u[1], v[1], w[1], 0.0,
+        u[2], v[2], w[2], 0.0,
+         0.0,  0.0,  0.0, 1.0
+    };
 
     glMultMatrixf(A);
     glMultMatrixf(B);
