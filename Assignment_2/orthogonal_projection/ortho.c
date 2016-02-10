@@ -39,4 +39,24 @@ void myOrtho(GLdouble left,
              GLdouble near,
              GLdouble far) {
 
+	/* Scaling matrix */
+	GLdouble MorthoScl[16] =
+	{
+		2 / (right - left), 0, 0, 0,
+		0, 2 / (top - bottom), 0, 0,
+		0, 0, 2 / (near - far), 0,
+		0, 0, 0, 1
+	};
+
+	/* Matrix for translating to the origin */
+	GLdouble MorthoTrl[16] =
+	{
+		1, 0, 0, 0,
+		0, 1, 1, 0,
+		0, 0, 1, 0,
+		-1 * (left + right) / 2, -1 * (bottom + top) / 2, -1 * (near + far) / 2, 1
+	};
+
+	glMultMatrixd(MorthoScl);
+	glMultMatrixd(MorthoTrl);
 }
