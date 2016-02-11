@@ -48,53 +48,46 @@ void normalize(GLdouble *v){
 void calculate_crossproduct(GLdouble* v0, GLdouble* v1, GLdouble* return_v){
 
     return_v[0] = v0[1] * v1[2] - v1[1] * v0[2];
-    return_v[1] = v0[0] * v1[2] - v1[0] * v0[2];
+    return_v[1] = v0[2] * v1[0] - v1[2] * v0[0];
     return_v[2] = v0[0] * v1[1] - v1[0] * v0[1];
 }
-
 
 void myLookAt(GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ,
               GLdouble centerX, GLdouble centerY, GLdouble centerZ,
               GLdouble upX, GLdouble upY, GLdouble upZ) {
 
-    GLdouble cx[3], cy[3], cz[3], up[3];
+    GLdouble n[3], u[3], v[3], up[3], eye[3];
 
     up[0] = upX;
     up[1] = upY;
     up[2] = upZ;
 
-    cz[0] = centerX - eyeX;
-    cz[1] = centerY - eyeY;
-    cz[2] = centerZ - eyeZ;
+    eye[0] = eyeX;
+    eye[1] = eyeY;
+    eye[2] = eyeZ;
 
-    normalize(cz);
-    normalize(up);
+    n[0] = eye[0] - centerX;
+    n[1] = eye[1] - centerY;
+    n[2] = eye[2] - centerZ;
 
-    calculate_crossproduct(cz, up, cx);
+    normalize(n);
 
-    normalize(cx);
+    calculate_crossproduct(up, n, u);
+    normalize(u);
 
-    calculate_crossproduct(cz, cx, cy);
+    calculate_crossproduct(n, u, v);
+    normalize(v);
 
-    normalize(cy);
-
-    GLfloat r_t[16] =
+    GLdouble r_t[16] =
     {
-        cx[0], cy[0], -cz[0], 0.0,
-        cx[1], cy[1], -cz[1], 0.0,
-        cx[2], cy[2], -cz[2], 0.0,
+        u[0], v[0], n[0], 0,
+        u[1], v[1], n[1], 0,
+        u[2], v[2], n[2], 0,
         0.0,   0.0,    0.0,   1.0
     };
 
-    // GLfloat r_t[16] =
-    // {
-    //     cx[0], cx[1], cx[2], 0.0,
-    //     cy[0], cy[1], cy[2], 0.0,
-    //     -cz[0], -cz[1], -cz[2], 0.0,
-    //     0.0,   0.0,    0.0,   1.0
-    // };
-
-    glMultMatrixf(r_t);
+    glMultMatrixd(r_t);
+    glTranslated(-eyeX, -eyeY, -eyeZ);
 
 
 
