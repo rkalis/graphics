@@ -1,18 +1,18 @@
-/* Computer Graphics, Assignment 5, Orthogonal projection
+/* Computer Graphics, Assignment, Translations, Rotations and Scaling
  *
- * Filename ........ ortho.c
- * Description ..... Contains the re-programmed orthogonal projection matrix
- * Date ............ 01.09.2006
- * Created by ...... Jurgen Sturm 
+ * Filename ........ transformations.c
+ * Description ..... Contains the re-programmed translation, rotation and scaling functions
  *
- * Student name ....
- * Student email ... 
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * STUDENT 1:
+ * Student name .... Robert Jan Schlimbach
+ * Student email ... robertjan.schlimbach@student.uva.nl
+ * Student ID ...... 10802126
  *
+ * STUDENT 2:
+ * Student name .... Rosco Kalis
+ * Student email ... rosco.kalis@student.uva.nl
+ * Student ID ...... 10771603
  *
- * (always fill in these fields before submitting!!)
  */
  
 #ifdef OS_X
