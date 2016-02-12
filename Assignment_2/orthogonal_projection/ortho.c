@@ -1,7 +1,7 @@
-/* Computer Graphics, Assignment, Translations, Rotations and Scaling
+/* Computer Graphics, Assignment 2, Orthogonal Projection 
  *
- * Filename ........ transformations.c
- * Description ..... Contains the re-programmed translation, rotation and scaling functions
+ * Filename ........ ortho.c
+ * Description ..... Contains the re-programmed orthogonal projection matrix
  *
  * STUDENT 1:
  * Student name .... Robert Jan Schlimbach
