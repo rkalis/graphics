@@ -63,8 +63,6 @@ void draw_bezier_curve(int num_segments, control_point p[], int num_points) {
         glVertex2f(x, y);
     }
     glEnd();
-    printf("dingen: ");
-    printf("%d, %d\n", sizeof(p), sizeof(control_point));
 }
 
 /* Finds the intersection of a cubic Bezier curve with the line X=x.
