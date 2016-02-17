@@ -11,7 +11,7 @@ ifeq ($(UNAME), Darwin)
 	CXXFLAGS=-g -O2 -Wall -Wextra -I${BULLET}/include -D OS_X
 else
 	BULLET=./bullet64
-	LDFLAGS=-g -L${BULLET}/lib -lGL -lglut -lGLU
+	LDFLAGS=-g -L${BULLET}/lib -lGL -lglut -lGLU -lm
 	CFLAGS=-g -O2 -std=c99 $(WARNING_FLAGS) -fno-strict-aliasing
 	CXXFLAGS=-g -O2 -Wall -Wextra -I${BULLET}/include
 endif
