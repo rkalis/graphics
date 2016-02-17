@@ -63,24 +63,34 @@ void draw_bezier_curve(int num_segments, control_point p[], int num_points) {
         glVertex2f(x, y);
     }
     glEnd();
+    printf("dingen: ");
+    printf("%d, %d\n", sizeof(p), sizeof(control_point));
 }
 
 /* Finds the intersection of a cubic Bezier curve with the line X=x.
+ * It divides the bezier curve up into a lot of smaller pieces, and checks
+ * if the piece intersects the line X=x. If it does, it sets *7 to
+ * the average y value of the intersecting piece.
+ * This isn't the most optimised strategy, but it is the simplest.
  * Returns 1 if an intersection was found and places the corresponding y
  * value in *y.
  * Returns 0 if no intersection exists.
 */
 int intersect_cubic_bezier_curve(float *y, control_point p[], float x) {
-    float x_test;
+    float x_old;
+    float x_new;
+    float y_old;
+    float y_new;
     int max_i = 1000;
-    int num_points = sizeof(p) / sizeof(control_point);
-    for(int i = 0; i <= max_i; i++) {
+    int num_points = 4;
+    evaluate_bezier_curve(&x_old, &y_old, p, num_points, 0);
+    for(int i = 1; i <= max_i; i++) {
         float u = (float) i / (float) max_i;
-        evaluate_bezier_curve(&x_test, y, p, num_points, u);
-        if(x_test == x) {
+        evaluate_bezier_curve(&x_new, &y_new, p, num_points, u);
+        if(x_old < x && x_new > x) {
+            y = (y_old + y_new) / 2;
             return 1;
         }
     }
     return 0;
 }
-
