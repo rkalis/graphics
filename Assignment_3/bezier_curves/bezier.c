@@ -88,7 +88,7 @@ int intersect_cubic_bezier_curve(float *y, control_point p[], float x) {
         float u = (float) i / (float) max_i;
         evaluate_bezier_curve(&x_new, &y_new, p, num_points, u);
         if(x_old < x && x_new > x) {
-            y = (y_old + y_new) / 2;
+            *y = (y_old + y_new) / 2;
             return 1;
         }
     }
