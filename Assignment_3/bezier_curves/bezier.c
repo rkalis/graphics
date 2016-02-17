@@ -65,13 +65,22 @@ void draw_bezier_curve(int num_segments, control_point p[], int num_points) {
     glEnd();
 }
 
-/* Find the intersection of a cubic Bezier curve with the line X=x.
-   Return 1 if an intersection was found and place the corresponding y
-   value in *y.
-   Return 0 if no intersection exists.
+/* Finds the intersection of a cubic Bezier curve with the line X=x.
+ * Returns 1 if an intersection was found and places the corresponding y
+ * value in *y.
+ * Returns 0 if no intersection exists.
 */
-
 int intersect_cubic_bezier_curve(float *y, control_point p[], float x) {
+    float x_test;
+    int max_i = 1000;
+    int num_points = sizeof(p) / sizeof(control_point);
+    for(int i = 0; i <= max_i; i++) {
+        float u = (float) i / (float) max_i;
+        evaluate_bezier_curve(&x_test, y, p, num_points, u);
+        if(x_test == x) {
+            return 1;
+        }
+    }
     return 0;
 }
 
