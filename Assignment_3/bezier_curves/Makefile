@@ -1,8 +1,6 @@
 CC=gcc
 CXX=g++
 
-#BULLET=./bullet32
-
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
 	BULLET=./bullet64MAC
