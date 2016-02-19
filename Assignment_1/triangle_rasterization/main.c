@@ -3,9 +3,15 @@
  * Created by ...... Paul Melis
  */
 
-#include <GLUT/glut.h>
+#ifdef OS_X
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 #include <sys/time.h>
 #include <stdlib.h>
 #include <stdio.h>
