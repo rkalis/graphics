@@ -1,0 +1,9 @@
+light 9 -4.0 10.0  0.7
+light -10 2.0 15.0  0.3
+
+material 1
+
+ply_file ../scenes/plateau.ply
+ply_file ../scenes/kubus.ply
+ply_file ../scenes/tetra.ply
+ply_file ../scenes/cone.ply

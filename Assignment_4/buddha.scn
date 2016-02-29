@@ -1,0 +1,13 @@
+light 9 -4.0 10.0  0.7
+light -10 2.0 15.0  0.3
+
+material 1
+
+sphere 0.65 -0.6 0.4 0.2
+sphere -0.6 0.75 0.4 0.4
+sphere -0.5 0.15 0.2 0.2
+
+ply_file ../scenes/plateau_subdivided.ply
+ply_file ../scenes/kubus.ply
+ply_file ../scenes/tetra.ply
+ply_file ../scenes/buddha.ply
