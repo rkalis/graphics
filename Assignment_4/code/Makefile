@@ -3,10 +3,10 @@ CC=gcc
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
 	LDFLAGS=-g -framework opengl -framework glut
-	CFLAGS=-g -O3 -std=c99 $(WARNING_FLAGS) -fno-strict-aliasing -D OS_X
+	CFLAGS=-g -O3 -std=c99 $(WARNING_FLAGS) -D OS_X
 else
 	LDFLAGS=-g -lGL -lglut -lGLU -lm
-	CFLAGS=-g -O3 -std=c99 $(WARNING_FLAGS) -fno-strict-aliasing
+	CFLAGS=-g -O3 -std=c99 $(WARNING_FLAGS)
 endif
 
 WARNING_FLAGS=-Wall -Wextra -Werror-implicit-function-declaration -Wshadow -Wstrict-prototypes -pedantic-errors
