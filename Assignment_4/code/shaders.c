@@ -1,13 +1,15 @@
 /* Computer Graphics and Game Technology, Assignment Ray-tracing
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * STUDENT 1:
+ * Student name .... Robert Jan Schlimbach
+ * Student email ... robertjan.schlimbach@student.uva.nl
+ * Student ID ...... 10802126
  *
+ * STUDENT 2:
+ * Student name .... Rosco Kalis
+ * Student email ... rosco.kalis@student.uva.nl
+ * Student ID ...... 10771603
  *
- * (always fill in these fields before submitting!!)
  */
 
 #include <math.h>
@@ -36,7 +38,17 @@ shade_constant(intersection_point ip)
 vec3
 shade_matte(intersection_point ip)
 {
-    return v3_create(1, 0, 0);
+    float contribution = scene_ambient_light;
+    for(int i = 0; i < scene_num_lights; i++) {
+        vec3 light_vector = v3_subtract(scene_lights[i].position, ip.p);
+        light_vector = v3_normalize(light_vector);
+        float light_contribution = v3_dotprod(ip.n, light_vector) * scene_lights[i].intensity;
+        if(light_contribution > 0) {
+            contribution += light_contribution;
+        }
+    }
+
+    return v3_create(contribution, contribution, contribution);
 }
 
 vec3
