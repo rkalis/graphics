@@ -1,13 +1,15 @@
 /* Computer Graphics and Game Technology, Assignment Ray-tracing
  *
- * Student name ....
- * Student email ...
- * Collegekaart ....
- * Date ............
- * Comments ........
+ * STUDENT 1:
+ * Student name .... Robert Jan Schlimbach
+ * Student email ... robertjan.schlimbach@student.uva.nl
+ * Student ID ...... 10802126
  *
+ * STUDENT 2:
+ * Student name .... Rosco Kalis
+ * Student email ... rosco.kalis@student.uva.nl
+ * Student ID ...... 10771603
  *
- * (always fill in these fields before submitting!!)
  */
 
 #ifdef OS_X
