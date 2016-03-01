@@ -193,19 +193,26 @@ ray_trace(void)
     image_plane_height = 2.0 * tan(0.5*VFOV/180*M_PI);
     image_plane_width = image_plane_height * (1.0 * framebuffer_width / framebuffer_height);
 
-    // ...
-    // ...
-    // ...
+    float middle_x = image_plane_width / 2;
+    float middle_y = image_plane_height / 2;
+
 
     // Loop over all pixels in the framebuffer
     for (j = 0; j < framebuffer_height; j++)
     {
         for (i = 0; i < framebuffer_width; i++)
         {
-            // ...
-            // ...
-            // ...
+            float img_i = i * 1.0 / framebuffer_width * image_plane_width;
+            float img_j = j * 1.0 / framebuffer_height * image_plane_height;
 
+            float right_factor = (img_i - middle_x);
+            float up_factor = (middle_y - img_j);
+
+            vec3 right_component = v3_multiply(right_vector, right_factor);
+            vec3 up_component = v3_multiply(up_vector, up_factor);
+            vec3 ray = v3_add(v3_add(right_component, up_component), forward_vector);
+
+            color = ray_color(0, scene_camera_position, ray);
             // Output pixel color
             put_pixel(i, j, color.x, color.y, color.z);
         }
@@ -213,6 +220,9 @@ ray_trace(void)
         sprintf(buf, "Ray-tracing ::: %.0f%% done", 100.0*j/framebuffer_height);
         glutSetWindowTitle(buf);
     }
+    color = ray_color(0, scene_camera_position, forward_vector);
+    // Output pixel color
+    put_pixel(0, 0, color.x, color.y, color.z);
 
     // Done!
     gettimeofday(&t1, NULL);
