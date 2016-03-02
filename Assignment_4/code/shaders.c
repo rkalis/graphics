@@ -23,15 +23,8 @@
 #include "quat.h"
 #include "constants.h"
 
-// shade_constant()
-//
-// Always return the same color. This shader does no real computations
-// based on normal, light position, etc. As such, it merely creates
-// a "silhouette" of an object.
-
-vec3
-shade_constant(intersection_point ip)
-{
+/* Returns red, used to create a silhoutte of an object */
+vec3 shade_constant(intersection_point ip) {
     return v3_create(1, 0, 0);
 }
 
@@ -52,10 +45,12 @@ vec3 shade_matte(intersection_point ip) {
         int shadow = shadow_check(ray_origin1, light_vector);
         shadow += shadow_check(ray_origin2, light_vector);
 
+        float light_contribution = v3_dotprod(ip.n, light_vector) 
+                                 * scene_lights[i].intensity;
+
         /* If there is light contribution and the ip isn't in the shadow
          * add the contribution of the light to the overall contribution */
         if(light_contribution > 0 &&  shadow < 2) {
-            float light_contribution = v3_dotprod(ip.n, light_vector) * scene_lights[i].intensity;
             contribution += light_contribution;
         }
     }
@@ -63,10 +58,63 @@ vec3 shade_matte(intersection_point ip) {
     return v3_create(contribution, contribution, contribution);
 }
 
-vec3
-shade_blinn_phong(intersection_point ip)
-{
-    return v3_create(1, 0, 0);
+/* Adds a specular component to the matte shader using the formula:
+ * cf = cd * (Ia + Kd * sum_i{Ii * max(0, n . li)}
+ *    + cs * Ks * sum_i{Ii * (n . h)^alpha} 
+ */
+vec3 shade_blinn_phong(intersection_point ip) {
+    int alpha = 50;
+
+    float kd = 0.8;
+    vec3 cd = v3_create(1, 0, 0);
+
+    float ks = 0.5;
+    vec3 cs = v3_create(1, 1, 1);
+
+    float diffuse_component = 0;
+    float specular_component = 0;
+
+    for(int i = 0; i < scene_num_lights; i++) {
+        /* Create the vector between the ip and the light and normalize it */
+        vec3 light_vector = v3_subtract(scene_lights[i].position, ip.p);
+        light_vector = v3_normalize(light_vector);
+
+        /* Create the vector in the middle between the camera and the light
+         * and normalize it */
+        vec3 h = v3_add(scene_lights[i].position, ip.i);
+        h = v3_normalize(h);
+
+        /* Check for shadows from two different origins to prevent self-shading
+         * on the balls */
+        vec3 ray_origin1 = v3_add(ip.p, v3_create(0.001, 0.001, 0.001));
+        vec3 ray_origin2 = v3_add(ip.p, v3_create(-0.001, -0.001, -0.001));
+        int shadow = shadow_check(ray_origin1, light_vector);
+        shadow += shadow_check(ray_origin2, light_vector);
+
+        /* Compute light contributions */
+        float diffuse_contribution  = v3_dotprod(ip.n, light_vector)
+                                    * scene_lights[i].intensity;
+        float specular_contribution = pow(v3_dotprod(ip.n, h), alpha)
+                                    * scene_lights[i].intensity;
+
+        /* If there is light contribution and the ip isn't in the shadow
+         * add the contribution of the light to the corresponding component */
+        if(shadow < 2) {
+            if(diffuse_contribution > 0) {
+                diffuse_component += diffuse_contribution;
+            }
+            specular_component += specular_contribution;
+        }
+    }
+
+    diffuse_component  *= kd;
+    diffuse_component  += scene_ambient_light;
+
+    specular_component *= ks;
+
+    return v3_add(v3_multiply(cd, diffuse_component), 
+                  v3_multiply(cs, specular_component));
+
 }
 
 vec3
