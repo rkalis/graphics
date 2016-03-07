@@ -10,7 +10,12 @@
 #ifndef POLYS_H
 #define POLYS_H
 
+#ifdef OS_X
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
 #include "v3math.h"
 
 #define MAX_VERTICES    4
