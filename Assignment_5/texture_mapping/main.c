@@ -38,6 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #include "polys.h"
 #include "ppmio.h"
 #include "geometry.h"
@@ -142,9 +143,9 @@ InitializePolygonlists(void)
 
     // A single tree object
     polylistTreeLeafs = CreatePolylist(10);
-    createSphere(polylistTreeLeafs, 0.7, 0.7, 0.7,  0, 1.7, 0,  0, 1, 0);
+    loadPolygonalObject(polylistTreeLeafs, "leaf.obj", texture_names, 0.2, 0.0, 1.7, 0.0);
     for (i = 0; i < polylistTreeLeafs->length; i++)
-        polylistTreeLeafs->items[i].texture_id = texture_names[0];
+        polylistTreeLeafs->items[i].texture_id = texture_names[6];
 
     polylistTreeStem = CreatePolylist(10);
     createCylinder(polylistTreeStem, 0.075, 1.8,  0, 0, 0,  0.5, 0.3, 0);
@@ -428,7 +429,7 @@ DrawGLScene(void)
 
     // Re-seed the random generator, so we always get the same sequence
     // back from rand_float() below, for different runs of the program.
-    srand(95497452);
+    srand(80085);
 
     for (int t = 0; t < 12; t++)
     {
@@ -441,9 +442,15 @@ DrawGLScene(void)
         glRotatef(rand_float()*360.0, 0, 1, 0);
         glScalef(1, 1 + (rand_float()-0.5)*0.6, 1);
 
-        DrawPolylist(polylistTreeStem);
-        DrawPolylist(polylistTreeLeafs);
+        int num_leaves = rand() % 5 + 5;
+        // int num_leaves = 5;
+        float angle = 360.0 / num_leaves;
 
+        DrawPolylist(polylistTreeStem);
+        for(int i = 0; i < num_leaves; i++) {
+            glRotatef(angle, 0, 1, 0);
+            DrawPolylist(polylistTreeLeafs);
+        }
         glPopMatrix();
     }
 
