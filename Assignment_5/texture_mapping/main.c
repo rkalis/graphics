@@ -269,9 +269,20 @@ InitGL(void)
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+
+            /* According to https://www.opengl.org/wiki/Common_Mistakes#gluBuild2DMipmaps
+             * you should never use gluBuild2DMipmaps, so instead we're using
+             * the advised method
+             */
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); 
             glCheckError("glTexParameteri");
 
+            /* Here is the gluBuild2DMipmaps implementation commented out,
+             * as we're using the advised method
+             */
+            // gluBuild2DMipmaps(GL_TEXTURE_2D, texture_internal_format,
+            //     width, height, texture_format, texture_type, image_data);
             glTexImage2D(GL_TEXTURE_2D, 0, texture_internal_format,
                 width, height, 0, texture_format, texture_type, image_data);
             glCheckError("glTexImage2D");
