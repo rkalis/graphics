@@ -38,6 +38,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #include "polys.h"
 #include "ppmio.h"
 #include "geometry.h"
@@ -142,9 +143,9 @@ InitializePolygonlists(void)
 
     // A single tree object
     polylistTreeLeafs = CreatePolylist(10);
-    createSphere(polylistTreeLeafs, 0.7, 0.7, 0.7,  0, 1.7, 0,  0, 1, 0);
+    loadPolygonalObject(polylistTreeLeafs, "leaf.obj", texture_names, 0.2, 0.0, 1.7, 0.0);
     for (i = 0; i < polylistTreeLeafs->length; i++)
-        polylistTreeLeafs->items[i].texture_id = texture_names[0];
+        polylistTreeLeafs->items[i].texture_id = texture_names[6];
 
     polylistTreeStem = CreatePolylist(10);
     createCylinder(polylistTreeStem, 0.075, 1.8,  0, 0, 0,  0.5, 0.3, 0);
@@ -266,12 +267,23 @@ InitGL(void)
             glBindTexture(GL_TEXTURE_2D, texture_names[i]);
             glCheckError("glBindTexture");
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+
+            /* According to https://www.opengl.org/wiki/Common_Mistakes#gluBuild2DMipmaps
+             * you should never use gluBuild2DMipmaps, so instead we're using
+             * the advised method
+             */
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); 
             glCheckError("glTexParameteri");
 
+            /* Here is the gluBuild2DMipmaps implementation commented out,
+             * as we're using the advised method
+             */
+            // gluBuild2DMipmaps(GL_TEXTURE_2D, texture_internal_format,
+            //     width, height, texture_format, texture_type, image_data);
             glTexImage2D(GL_TEXTURE_2D, 0, texture_internal_format,
                 width, height, 0, texture_format, texture_type, image_data);
             glCheckError("glTexImage2D");
@@ -322,7 +334,9 @@ DrawPolylist(polys * list)
         for (j = 0; j < p.points; j++)
         {
             glNormal3f(p.normal[j].x, p.normal[j].y, p.normal[j].z);
+            glTexCoord2f(p.tcoord[j].x, p.tcoord[j].y);
             glVertex3f(p.pts[j].x, p.pts[j].y, p.pts[j].z);
+
         }
         glEnd();
     }
@@ -415,7 +429,7 @@ DrawGLScene(void)
 
     // Re-seed the random generator, so we always get the same sequence
     // back from rand_float() below, for different runs of the program.
-    srand(95497452);
+    srand(80085);
 
     for (int t = 0; t < 12; t++)
     {
@@ -428,9 +442,15 @@ DrawGLScene(void)
         glRotatef(rand_float()*360.0, 0, 1, 0);
         glScalef(1, 1 + (rand_float()-0.5)*0.6, 1);
 
-        DrawPolylist(polylistTreeStem);
-        DrawPolylist(polylistTreeLeafs);
+        int num_leaves = rand() % 5 + 5;
+        // int num_leaves = 5;
+        float angle = 360.0 / num_leaves;
 
+        DrawPolylist(polylistTreeStem);
+        for(int i = 0; i < num_leaves; i++) {
+            glRotatef(angle, 0, 1, 0);
+            DrawPolylist(polylistTreeLeafs);
+        }
         glPopMatrix();
     }
 
@@ -438,7 +458,7 @@ DrawGLScene(void)
 
     glPushAttrib(GL_LIGHTING_BIT);
     glDisable(GL_LIGHTING);
-    //DrawPolylist(polylistSkydome);
+    DrawPolylist(polylistSkydome);
     glPopAttrib();
 
     glutSwapBuffers();

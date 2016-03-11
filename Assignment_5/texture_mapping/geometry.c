@@ -106,8 +106,8 @@ setHemispherePoint(vec3 *p, vec3* n, vec3* t, int latitude, int longitude,
     p->z = oz + cos(longitude * dToR) * cos(latitude * dToR) * s;
 
     // Set texture coordinate
-    t->x = 0.0;
-    t->y = 0.0;
+    t->x = longitude / 360.0;
+    t->y = latitude / 90.0;
 
     // calculate normal
     n->x = p->x - ox;
@@ -201,7 +201,8 @@ createCylinder(polys * list, double radius, double height,
             p.normal[i].z /= len;
 
             // Set texture coordinate
-            p.tcoord[i].x = p.tcoord[i].y = 0.0;
+            p.tcoord[i].x = longitude / 360.0;
+            p.tcoord[i].y = (p.pts[i].y - oy) / height;
         }
 
         AddPolyToPolylist(list, p);
