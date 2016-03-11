@@ -29,7 +29,13 @@ interpolate_points(unsigned char isovalue, vec3 p1, vec3 p2, unsigned char v1, u
     /* Initially, simply return the midpoint between p1 and p2.
        So no real interpolation is done yet */
 
-    return v3_add(v3_multiply(p1, 0.5), v3_multiply(p2, 0.5));
+    float temp_v1, temp_v2, total_distance;
+    temp_v1 = (float)v1;
+    temp_v2 = (float)v2;
+
+    total_distance = temp_v1 + temp_v2
+
+    return v3_add(v3_multiply(p1, temp_v1/total_distance), v3_multiply(p2, temp_v2/total_distance));
 }
 
 int get_case_number(unsigned char isovalue, int v0, int v1, int v2, int v3){
@@ -45,7 +51,7 @@ int get_case_number(unsigned char isovalue, int v0, int v1, int v2, int v3){
     return case_no;
 }
 
-void add_triangle(triangle **triangles, triangle t){
+void add_triangle(triangle **triangles, triangle t){;
     *triangles[num_triangles*sizeof(triangle)] = t;
     num_triangles++;
 }
@@ -161,7 +167,6 @@ int
 generate_cell_triangles(triangle **triangles, cell c, unsigned char isovalue)
 {
     *triangles = malloc(6*2*sizeof(triangle));
-    printf("in cell_triangle\n");
     num_triangles = 0;
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 1, 3, 7); //T1
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 2, 6 ,7); //T2
@@ -169,8 +174,6 @@ generate_cell_triangles(triangle **triangles, cell c, unsigned char isovalue)
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 2, 3, 7); //T4
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 4, 5, 7); //T5
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 4, 6, 7); //T6
-    printf("out of cell_triangle\n");
-
 
     return num_triangles;
 }
