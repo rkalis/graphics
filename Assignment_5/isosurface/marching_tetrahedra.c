@@ -17,7 +17,7 @@
 #include <assert.h>
 #include "marching_tetrahedra.h"
 
-static int num_triangles;
+int num_triangles;
 
 /* Compute a linearly interpolated position where an isosurface cuts
    an edge between two vertices (p1 and p2), each with their own
@@ -45,18 +45,9 @@ int get_case_number(unsigned char isovalue, int v0, int v1, int v2, int v3){
     return case_no;
 }
 
-void add_triangle(triangle *triangles, triangle t){
-    if(!num_triangles){
-        triangles = malloc(sizeof(triangle));
-        assert(triangles);
-        triangles[0] = t;
-        num_triangles++;
-    }
-    else{
-        triangles = realloc(triangles, (num_triangles+1)*sizeof(triangle));
-        triangles[num_triangles] = t;
-        num_triangles++;
-    }
+void add_triangle(triangle **triangles, triangle t){
+    *triangles[num_triangles*sizeof(triangle)] = t;
+    num_triangles++;
 }
 
 /* Using the given iso-value generate triangles for the tetrahedron
@@ -69,9 +60,8 @@ void add_triangle(triangle *triangles, triangle t){
    Note: the output array "triangles" should have space for at least
          2 triangles.
 */
-
-static int
-generate_tetrahedron_triangles(triangle *triangles, unsigned char isovalue, cell c, int v0, int v1, int v2, int v3)
+int
+generate_tetrahedron_triangles(triangle **triangles, unsigned char isovalue, cell c, int v0, int v1, int v2, int v3)
 {
 
     int case_no = get_case_number(isovalue, v0, v1, v2, v3);
@@ -168,8 +158,10 @@ generate_tetrahedron_triangles(triangle *triangles, unsigned char isovalue, cell
 */
 
 int
-generate_cell_triangles(triangle *triangles, cell c, unsigned char isovalue)
+generate_cell_triangles(triangle **triangles, cell c, unsigned char isovalue)
 {
+    *triangles = malloc(6*2*sizeof(triangle));
+    printf("in cell_triangle\n");
     num_triangles = 0;
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 1, 3, 7); //T1
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 2, 6 ,7); //T2
@@ -177,7 +169,7 @@ generate_cell_triangles(triangle *triangles, cell c, unsigned char isovalue)
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 2, 3, 7); //T4
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 4, 5, 7); //T5
     generate_tetrahedron_triangles(triangles, isovalue, c, 0, 4, 6, 7); //T6
-    
+    printf("out of cell_triangle\n");
 
 
     return num_triangles;
