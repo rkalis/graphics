@@ -233,7 +233,19 @@ void DrawVolumeAsIsosurface(void)
 }
 
 void FillArrayWithIsosurface(void)
-{
+{   
+    int i,j,k;
+    int num_triangles = 0;
+    for (k = 0; k < nz; k++){
+        for (j = 0; j < ny; j++){
+            for (i = 0; i < nx; i++){
+                cell c = get_cell(i, j, k);
+
+                triangle *triangles;
+                num_triangles += generate_cell_triangles(triangles, c, isovalue);
+            }
+        }
+    }
 }
 
 void DrawScene(void)

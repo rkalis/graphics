@@ -17,6 +17,8 @@
 
 #include "volume.h"
 
+
+
 /* The voxels of the volume dataset, stored as a one-dimensional array */
 unsigned char   *volume;
 
@@ -25,6 +27,8 @@ int     nx, ny, nz;
 
 /* The size of a voxel */
 float   sizex, sizey, sizez;
+
+
 
 /* Utility function to convert the index of a voxel
    into an index in the volume array above */
@@ -41,6 +45,25 @@ cell
 get_cell(int i, int j, int k)
 {
     cell c;
+
+    int l, temp_i, temp_j, temp_k, index;
+    for(l=0; l<8; l++){
+        temp_i = i + (l % 2);
+        temp_j = j;
+        temp_k = k;
+
+        if(l%4 >= 2)
+            temp_j++;
+        if(l%8 >= 4)
+            temp_k++;
+
+        index = voxel2idx(temp_i, temp_j, temp_k);
+
+        c.p[l] = v3_create(temp_i, temp_j, temp_k);
+        c.value[l] = volume[index];
+
+    }
+    
     return c;
 }
 
@@ -106,4 +129,5 @@ read_volume(const char *fname)
     }
 
     fclose(f);
+
 }
