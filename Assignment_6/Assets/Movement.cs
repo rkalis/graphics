@@ -5,7 +5,8 @@ public class Movement : MonoBehaviour {
 	public float speed = 10.0f;
 	public float jumpSpeed = 5.0f;
 	private bool colliding;
-	private bool grounded;
+	private bool grounded = false;
+	public float lastDirection = 1;
 
 	// Use this for initialization
 	void Start () {
@@ -15,10 +16,15 @@ public class Movement : MonoBehaviour {
 		
 	void OnCollisionStay2D(Collision2D coll) {
 		Rigidbody2D body = GetComponent<Rigidbody2D> ();
-		if (coll.contacts [0].point.y < body.position.y &&
-			coll.contacts [1].point.y < body.position.y) {
-			grounded = true;
+		bool points = false;
+		foreach (ContactPoint2D point in coll.contacts) {
+			points = true;
+			if (point.point.y > body.position.y - GetComponent<BoxCollider2D>().size.y / 2) {
+				points = false;
+				break;
+			}
 		}
+		grounded = points || grounded;
 		colliding = true;
 	}
 	void OnCollisionExit2D(Collision2D coll) {
@@ -30,8 +36,13 @@ public class Movement : MonoBehaviour {
 	void FixedUpdate () {
 		Rigidbody2D body = GetComponent<Rigidbody2D> ();
 		Vector2 velocity = body.velocity;
-		float xVelocity = Input.GetAxisRaw ("Horizontal") * speed;
+		float direction = Input.GetAxisRaw ("Horizontal");
+		float xVelocity = direction * speed;
 		velocity.x = xVelocity;
+
+		if (direction != 0) {
+			lastDirection = direction;
+		}
 
 		if (Input.GetAxisRaw ("Vertical") == 1 && grounded) {
 			velocity.y = jumpSpeed;
