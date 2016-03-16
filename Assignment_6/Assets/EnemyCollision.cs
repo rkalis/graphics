@@ -10,12 +10,15 @@ public class EnemyCollision : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Player") {
-			Destroy (coll.gameObject);
+//			Destroy (coll.gameObject);
+			Lives.lives--;
+			if (Lives.lives <= 0)
+				GameOver.outcome = -1;
+			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }
