@@ -10,11 +10,15 @@ public class OneWayPlatformTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		platform.GetComponent<BoxCollider2D> ().isTrigger = true;
+		if (other.gameObject.tag == "Player") {
+			other.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D other) {
-		platform.GetComponent<BoxCollider2D> ().isTrigger = false;
+		if (other.gameObject.tag == "Player") {
+			other.gameObject.GetComponent<BoxCollider2D>().isTrigger = false;
+		}
 	}
 	
 	// Update is called once per frame
