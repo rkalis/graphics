@@ -11,6 +11,7 @@ public class ProjectileCollision : MonoBehaviour {
 		if (coll.gameObject.tag == "Enemy") {
 			coll.gameObject.GetComponent<AudioSource> ().Play ();
 			coll.gameObject.GetComponent<Renderer> ().enabled = false;
+			coll.gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
 			Destroy (coll.gameObject, coll.gameObject.GetComponent<AudioSource> ().clip.length);
 		}
 		Destroy (gameObject);
