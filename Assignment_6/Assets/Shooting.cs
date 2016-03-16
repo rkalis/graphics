@@ -19,10 +19,10 @@ public class Shooting : MonoBehaviour {
 			float offset = movement.lastDirection * GetComponent<BoxCollider2D>().size.x;
 			Vector3 position = transform.position;
 			position.x += offset;
-			position.y += GetComponent<BoxCollider2D>().size.y;
+			position.y += GetComponent<BoxCollider2D>().size.y / 2;
 			GameObject newProjectile = (GameObject) Instantiate(projectile, position, transform.rotation);
 			Rigidbody2D body = newProjectile.GetComponent<Rigidbody2D> ();
-			Vector2 velocity = new Vector2(movement.lastDirection * projectileSpeed, projectileSpeed);
+			Vector2 velocity = new Vector2(movement.lastDirection * projectileSpeed, 0);
 			body.velocity = velocity;
 		}
 	}
