@@ -28,7 +28,7 @@ public class GameOver : MonoBehaviour {
 			gameOverButton.GetComponent<Image>().color = new Color(180,180,180,255);
 			gameOverButtonText.GetComponent<Text> ().color = new Color(0,0,0,255);
 
-			gameOverText.GetComponent<Text>().text = outcome == 1 ? "YOU ROCK\nScore: " +  controller.GetComponent<Score>().score : "YOU LOSE";
+			gameOverText.GetComponent<Text>().text = outcome == 1 ? "YOU ROCK" : "YOU LOSE";
 
 
 		}

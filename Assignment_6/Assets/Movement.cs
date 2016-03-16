@@ -60,6 +60,8 @@ public class Movement : MonoBehaviour {
 	}
 
 	void LateUpdate() {
+		if (GetComponent<Transform> ().position.y < -10)
+			Lives.loseLife ();
 		Vector3 cameraPos = transform.position;
 		cameraPos.z = -10;
 		camera.transform.position = cameraPos;
