@@ -7,6 +7,7 @@ public class Movement : MonoBehaviour {
 	private bool colliding;
 	private bool grounded = false;
 	public float lastDirection = 1;
+	public Camera camera;
 
 	// Use this for initialization
 	void Start () {
@@ -49,5 +50,11 @@ public class Movement : MonoBehaviour {
 		}
 		body.velocity = velocity;
 
+	}
+
+	void LateUpdate() {
+		Vector3 cameraPos = transform.position;
+		cameraPos.z = -10;
+		camera.transform.position = cameraPos;
 	}
 }
