@@ -7,6 +7,7 @@ public class Movement : MonoBehaviour {
 	private bool colliding;
 	private bool grounded = false;
 	public float lastDirection = 1;
+	private bool canJumpDown = false;
 	public Camera camera;
 
 	// Use this for initialization
@@ -26,11 +27,14 @@ public class Movement : MonoBehaviour {
 			}
 		}
 		grounded = points || grounded;
+		if (coll.gameObject.tag == "One Way Platform" && grounded)
+			canJumpDown = true;
 		colliding = true;
 	}
 	void OnCollisionExit2D(Collision2D coll) {
 		colliding = false;
 		grounded = false;
+		canJumpDown = false;
 	}
 
 	// Update is called once per frame
@@ -47,6 +51,9 @@ public class Movement : MonoBehaviour {
 
 		if (Input.GetAxisRaw ("Vertical") == 1 && grounded) {
 			velocity.y = jumpSpeed;
+		}
+		else if(Input.GetAxisRaw("Vertical") == -1 && canJumpDown) {
+			gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 		}
 		body.velocity = velocity;
 
