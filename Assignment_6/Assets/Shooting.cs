@@ -24,6 +24,9 @@ public class Shooting : MonoBehaviour {
 			Rigidbody2D body = newProjectile.GetComponent<Rigidbody2D> ();
 			Vector2 velocity = new Vector2(movement.lastDirection * projectileSpeed, 0);
 			body.velocity = velocity;
+
+			newProjectile.GetComponent<AudioSource> ().Play ();
+
 		}
 	}
 }

@@ -50,6 +50,7 @@ public class Movement : MonoBehaviour {
 		}
 
 		if (Input.GetAxisRaw ("Vertical") == 1 && grounded) {
+			GetComponent<AudioSource> ().Play();
 			velocity.y = jumpSpeed;
 		}
 		else if(Input.GetAxisRaw("Vertical") == -1 && canJumpDown) {

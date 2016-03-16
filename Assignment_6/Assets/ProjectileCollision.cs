@@ -9,12 +9,14 @@ public class ProjectileCollision : MonoBehaviour {
 	}
 	void OnCollisionEnter2D(Collision2D coll) {
 		if (coll.gameObject.tag == "Enemy") {
-			Destroy (coll.gameObject);
+			coll.gameObject.GetComponent<AudioSource> ().Play ();
+			coll.gameObject.GetComponent<Renderer> ().enabled = false;
+			Destroy (coll.gameObject, coll.gameObject.GetComponent<AudioSource> ().clip.length);
 		}
 		Destroy (gameObject);
 	}
 	void OnBecameInvisible() {
-		Destroy (gameObject);
+		Destroy (gameObject, 1.0f);
 	}
 	
 	// Update is called once per frame
