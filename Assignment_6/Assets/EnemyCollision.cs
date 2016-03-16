@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerCollision : MonoBehaviour {
+public class EnemyCollision : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -9,8 +9,8 @@ public class PlayerCollision : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
-		if (coll.gameObject.tag == "Enemy") {
-			Destroy (gameObject);
+		if (coll.gameObject.tag == "Player") {
+			Destroy (coll.gameObject);
 		}
 	}
 	
