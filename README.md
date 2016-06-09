@@ -2,7 +2,7 @@
 
 These are our university assignments for the course on Computer Graphics.
 
-The code and Makefiles should platform independent on Unix platforms and have been tested on OSX 10.11 and Ubuntu 14.04.
+The code and Makefiles should be platform independent on Unix platforms and have been tested on OSX 10.11 and Ubuntu 14.04.
 
 Most assignments are written in C with some [OpenGL 2.0](https://www.opengl.org/). Assigment 1 makes use of [SDL](https://www.libsdl.org/), Assignment 3 makes use of the [Bullet](http://bulletphysics.org/) physics library, and assignment 6 is written fully using C# and [Unity3D](http://unity3d.com/).
 
